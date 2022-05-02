@@ -1,0 +1,59 @@
+{% load static %}
+
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark pt-2 pb-1">
+    <div class="container">
+
+        <a class="navbar-brand" href="{% url 'social:messages' %}">
+            <img id='logo' width="180" class="me-2 pb-2" src="{% static 'social/logoname.png' %}" alt="Social Network">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'editor' %} active {% endif %}" href="{% url 'social:editor' %}">
+                        <i class="fas fa-edit"></i>
+                        Summarise
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'documents' %} active {% endif %}" href="{% url 'social:documents' %}">
+                        <i class="fas fa-folder"></i>
+                        My Documents
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'profile' %} active {% endif %}" href="{% url 'social:profile' %}">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'profile' %} active {% endif %}" href="{% url 'social:legal-dict' %}">
+                        <i class="fas fa-book"></i>
+                        Legal Dictionary
+                    </a>
+                </li>
+                {% endif %}            
+            </ul>
+
+            {% if user.is_authenticated %}
+            <a class="navbar-brand">
+             <span class='handwritten' style="font-size: 80%;">
+                Hi,
+                    {{ user.username }}      
+             </span>
+             </a>
+            <a class="btn btn-outline-light" href="{% url 'social:logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+                Log Out
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

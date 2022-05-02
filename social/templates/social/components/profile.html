@@ -1,0 +1,17 @@
+{% load static %}
+
+<div class="d-flex align-items-center">
+    <img
+        id='profile-img'
+        height=150
+        class="border rounded shadow"
+        {% if profile.image %}
+            src='{{profile.image.url}}'>
+        {% else %}
+            src="{% static 'social/profile-image.jpg' %}"
+        {% endif %}
+        </img>
+    <div class="p-3">
+        {{ profile.text }}
+    </div>
+</div>

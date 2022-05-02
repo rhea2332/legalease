@@ -1,0 +1,240 @@
+{% extends "social/base.html" %}
+{% load social_extras %}
+{% load static %}
+
+{% block content %}
+    <div id="app">
+        <div class="thumbnail">
+            <img src="static/social/fold.png" alt="" style="margin:auto; height: 90vh; width: auto">          
+            <div class="caption1" style="width:auto; height:10vh;">
+                <img src="static/social/laymen.gif"style=" height: 23vh" >
+            </div> 
+            <div class="caption">
+                <h2>Written by Lawyers for lawyers</h2>
+                <h6>Don't waste time! Start reading your legal documents before signing.
+                Get a summarised version with key information extracted to help 
+                you reduce your reading time.</h6>
+                <br>
+                <button
+                    class="btn btn-primary btn-sm"
+                    onclick="location.href='{% url 'social:editor' %}';"
+                >
+                    Go to Editor
+                </button>
+            </div>
+        </div>
+        <div class='container'>
+            <div class="row">
+                <div class="col">
+                    <img src="static/social/image1.png" >
+                </div>
+                <div class="col">
+                    <div class='h3 mt-4 text-center'>
+                        Simplify and Summarise
+                    </div>
+                    <p class='text-center'>Copy and paste text or drag and drop documents in the 
+                        editor to rewrite legal text in plain English.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class='h3 mt-4 text-center'>
+                        Upload and Save
+                    </div>
+                    <p class='text-center'>Create an account to upload legal documents and 
+                        save edited versions in 'My Documents' for later use.</p>
+                </div>
+                <div class="col">
+                    <img src="static/social/image2.png" >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img src="static/social/image3.png" >
+                </div>
+                <div class="col">
+                    <div class='h3 mt-4 text-center'>
+                        Define and Highlight
+                    </div>
+                    <p class='text-center'>Find meaning of difficult legal words, 
+                        automatically highlighted by our in-built dictionary.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="thumbnail">
+            <img src="static/social/background-bottom.png" alt="" style="margin:auto; height: 71vh; width: auto">          
+        </div>
+        
+        <!-- <div class="d-flex align-items-center">
+            <img
+                height=150
+                class="border rounded shadow"
+                :src="avatar"
+            >
+            </img>
+            <div v-if="profile" class="p-3">
+                [[ profile.text ]]
+            </div>
+            <div v-else class="p-3 text-secondary">
+                Profile text
+            </div>
+        </div>
+
+        <div class='h5 mt-3 pt-2'>
+            <div v-if="user.username == view">
+                Your Messages
+            </div>
+            <div v-else>
+                [[view]]'s Messages
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class='mb-2 mt-1'>
+                    Type here to leave a message:
+                </div>
+                <textarea v-model="message" class='form-control' name='text' cols='50' rows='3'></textarea>
+            </div>
+            <div class="form-group mt-3">
+                Public
+                    <input v-model="public" value="yes" type='radio' class='pm_class ms-1 me-2' name='pm'>
+                Private
+                    <input v-model="public" value="no" type='radio' class='pm_class ms-1 me-4' name='pm'>
+                <input type='hidden' name='recip' :value='view'>
+                <button
+                    class="btn btn-primary btn-sm"
+                    @click="postMessage2"
+                    :disabled="!message"
+                >
+                    Post Message
+                </button>
+            </div>
+        </div>
+
+        <div v-for="message in messages" class="my-1">
+            [[ message.time]]
+            <a :href="`{% url 'social:messages' %}?view=${message.sender}`">
+                [[ message.sender ]]
+            </a>
+            <span v-if="message.public">
+                wrote:
+            </span>
+            <span v-else class="whisper">
+                whispered:
+            </span>
+            [[ message.text ]]
+            <button
+                v-if="(message.sender == user.username) || (message.recip == user.username)"
+                @click="deleteMessage2(message)"
+                class="btn btn-sm btn-danger border remove-btn ml-2"
+            >
+                <i class="far fa-trash-alt"></i>
+            </button>
+        </div> -->
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    const app = Vue.createApp({
+        delimiters: ["[[", "]]"],
+        data() {
+            return {
+                ...{{vue_data|safe}},
+                message: "",
+                public: "yes",
+
+            }
+        },
+        mounted() {
+            $("#app").show();
+        },
+        methods: {
+            postMessage1() {
+                // POST new message using jQuery $.ajax
+                let app = this;
+                $.ajax({
+                    method: "POST",
+                    url: `{% url 'social:messages api' %}?view=${this.view}`,
+                    body: {
+                        message: this.message,
+                        public: this.public,
+                        recip: this.view,
+                        text: this.message,
+                    },
+                    headers : {
+                        "X-CSRFToken" : $("[name=csrfmiddlewaretoken]").val(),
+                    },
+                    success(data) {
+                        app.messages = data.messages;
+                        app.message = "";
+                        app.public = "yes";
+                    }
+                })
+            },
+            postMessage2() {
+                // POST new message using fetch API
+                let app = this;
+                formData = new FormData();
+                formData.append('message', this.message);
+                formData.append('public', this.public);
+                formData.append('recip', this.view);
+                formData.append('text', this.message);
+
+                fetch(`{% url 'social:messages api' %}?view=${this.view}`, {
+                    method: "POST",
+                    body: formData,
+                    headers : { "X-CSRFToken" : $("[name=csrfmiddlewaretoken]").val() },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    app.messages = data.messages;
+                    app.message = "";
+                    app.public = "0";
+                })
+            },
+            deleteMessage1(message) {
+                // DELETE message using jQuery $.ajax
+                let app = this;
+                $.ajax({
+                    method: "DELETE",
+                    url: "{% url 'social:message api' 0 %}".replace("0", message.id),
+                    headers : { "X-CSRFToken" : $("[name=csrfmiddlewaretoken]").val() },
+                    success() {
+                        app.messages = app.messages.filter(m => m.id != message.id);
+                    },
+                    error() {
+                        alert("Deleting messsage failed");
+                    }
+                })
+            },
+            deleteMessage2(message) {
+                // DELETE message using fetch API
+                let app = this;
+                fetch("{% url 'social:message api' 0 %}".replace("0", message.id), {
+                    method: "DELETE",
+                    headers : { "X-CSRFToken" : $("[name=csrfmiddlewaretoken]").val() },
+                }).then(response => {
+                    if (response.ok) 
+                        app.messages = app.messages.filter(m => m.id != message.id);
+                    else 
+                        alert("Deleting messsage failed");
+                })
+            }
+        },
+        computed: {
+            avatar() {
+                if (this.profile && this.profile.image) 
+                    return this.profile.image
+                return "{% static 'social/profile-image.jpg' %}"
+            }
+        }
+    })
+    const vm = app.mount('#app')
+</script>
+{% endblock %}

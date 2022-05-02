@@ -1,0 +1,46 @@
+{% extends "social/base.html" %}
+
+{% block content %}
+    <div class='h3 mt-4 text-center'>
+       Editor
+        <form id="editor_form" method="POST">
+            {% csrf_token %}
+               <div class='container'>
+                <div class="row">
+                    <div class="col">
+                            <textarea class="form-control" name='text' rows='1'> Untitled Document </textarea>
+                    </div>
+                    <div class="col">
+                        <button
+                            class="btn btn-primary btn-sm"
+                            id="summarise" type="submit"
+                            >
+                                Summarise
+                        </button>
+                        <button
+                                class="btn btn-primary btn-sm" style="border-radius: 12% / 50%;"
+                                onclick="location.href='{% url 'social:documents' %}';"
+                            >
+                                Save to My Documents
+                         </button>
+                         
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="col">
+                            <textarea class="form-control" name='input_text' rows='30' placeholder="Copy and paste in your text here"> {{ text_to_summarise }} </textarea>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class='card border rounded bg-light mb-3 p-3' style='height:84vh'>
+                           <p>Summarised text</p>
+                           <h6 style="text-align:left">{{ summarised_text }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+{% endblock %}

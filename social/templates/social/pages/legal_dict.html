@@ -1,0 +1,95 @@
+{% extends "social/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<br><br><br>
+
+<h3>Search Word:</h3>
+
+<form action="" method="post"> {% csrf_token %}
+    <input type="text" name="word" id="word" placeholder="Enter a word" onkeyup="manage(this)">
+    <button class="btn btn-primary btn-sm" id="btSubmit" type="submit" disabled value="Submit">Search</button>
+</form>
+
+{% if stems %}
+<b>Stems:</b>
+    <p>
+        {% for stem in stems %}
+          <br>
+          {{stem}}
+          <br>
+        {% endfor %}
+    </p>
+{% endif %}
+
+<!-- {% if meaning %}
+<b>Meaning:</b>
+    <p>
+        {{meaning}}
+    </p>
+{% endif %} 
+
+{% if uros %}
+<b>Uros:</b>
+    {% for ure in uros %}
+        <p>
+            {{ure.0}} - {{ure.1}}
+        </p>
+    {% endfor %}
+{% endif %} -->
+
+{% if shortdef %}
+<b>Short Definition:</b>
+    <p>
+        {% for s in shortdef %}
+          <br>
+            {{s}}
+          <br>
+        {% endfor %}
+    </p>
+{% endif %}
+
+<br><br><br>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+        function manage(word) {
+                var bt = document.getElementById('btSubmit');
+                if (word.value != '') {
+                    bt.disabled = false;
+                }
+                else {
+                    bt.disabled = true;
+                }
+            }
+
+        $(function () {
+            // connecting click on profile image with click on upload file button
+            $('#profile-img').click(function() {
+                console.log('Uploading image...')
+                $("#img_file").click()
+            });
+
+            $('#img_file').change(function uploadFile() {
+                var formdata = new FormData()
+                var file = document.getElementById('img_file').files[0]
+                formdata.append('img_file', file)
+                formdata.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val())
+                $.ajax({
+                    type : 'POST',
+                    url  : "{% url 'social:uploadimage' %}",
+                    data : formdata,
+                    success: function(data) {
+                        $('#profile-img').attr("src",data);
+                    },
+                    processData : false,
+                    contentType : false,
+                })
+            })
+        })
+    </script>
+{% endblock %}

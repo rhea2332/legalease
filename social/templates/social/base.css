@@ -1,0 +1,135 @@
+
+.row{
+padding:1%;
+}
+
+
+img {
+    display: block;
+}
+
+.thumbnail {
+    position: relative;
+    display: inline-block;
+}
+.caption1 {
+    position: absolute;
+    top: 15%;
+    left: 23%;
+   
+}
+.caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -95%, -70% );
+    text-align: left;
+    color: white;
+    font-weight: bold;
+}
+
+.caption button, .col button {
+    background-color: #EEA70F;
+    border: none;
+    padding: 1.5%;
+    border-radius: 20% / 50%;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+#btSubmit{
+    background-color: #EEA70F;
+    border: none;
+    padding: 0.8%;
+    border-radius: 20% / 50%;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+.caption button:hover{
+    background-color: #007cff;
+}
+.col{
+    margin:auto;
+}
+.col img{
+    width:auto; 
+    height: 50vh; 
+    margin: auto;
+}
+.col p{
+    color:grey;
+}
+.appname {
+    text-align :center;
+    background :#eb8;
+    color      :#40d;
+    font-family:'Roboto';
+    font-size  :20pt;
+    padding    :4px;
+}
+
+.info {
+    background :lightgreen;
+    color      :blue;
+    border     :1px solid green;
+    padding    :5px 10px;
+    margin-left:10px;
+    margin-right:140px;
+}
+
+.subhead {
+    font-weight:bold;
+}
+
+.taken, .error {
+    color:red;
+}
+
+.available {
+    color:green;
+}
+
+.whisper {
+    font-style:italic;
+    color     :#006600;
+}
+
+#logo {
+    font-family: 'Roboto';
+    font-weight:bold;
+    font-style:italic;
+    font-size :97px;
+}
+
+@media (min-width: 1200px) {
+    .logo {
+        width: 600px;
+    }
+}
+@media (max-width: 1200px) {
+    .logo {
+        width: 470px;
+    }
+}
+@media (max-width: 767px) {
+    .logo {
+        width: 360px;
+    }
+}
+@media (max-width: 493px) {
+    .logo {
+        width: 230px;
+    }
+}
+
+nav {
+    background-color: rgb(1, 28, 80);
+}
+footer {
+    background-color: rgb(1, 28, 80);
+}
+.handwritten {
+    font-family: 'Roboto', cursive;
+}
+

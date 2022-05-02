@@ -1,0 +1,84 @@
+{% extends "social/base.html" %}
+{% load social_extras %}
+
+{% block content %}
+    {% if profile %}
+        {% include 'social/components/profile.html' %}
+    {% endif %}
+    <div class='h5 mt-3 pt-2'>
+        {% if user.username == view %}
+            Your Messages
+        {% else %}
+            <a href="{% url 'social:documents' %}?view={{view}}">{{view}}</a>'s Messages
+        {% endif %}
+    </div>
+    <form id='msg-form' method='POST' action="{% url 'social:messages' %}{% if user.username != view %}?view={{view}}{% endif %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class='mb-2 mt-1'>
+                Type here to leave a message:
+            </div>
+            <textarea class='form-control' name='text' cols='50' rows='3'></textarea>
+        </div>
+        <div class="form-group mt-3">
+            Public <input type='radio' class='pm_class ms-1 me-2' name='pm' value='0' checked='checked'>
+            Private <input type='radio' class='pm_class ms-1 me-4' name='pm' value='1'>
+            <input type='hidden' name='recip' value='{{view}}'>
+            <button type='submit' id='post-msg-btn' class="btn btn-primary btn-sm">Post Message</button>
+        </div>
+    </form>
+    <div id='messages-div' class="my-3">
+        {% for message in messages %}
+            {{ message|display_message:user.username|safe }}
+        {% empty %}
+            <div class='info'>No messages yet</div>
+        {% endfor %}
+    </div>
+    <a class="btn btn-sm btn-primary" href="{% url 'social:messages' %}?view={{view}}">
+        Refresh messages
+    </a>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function remove_button() {
+        let message = $(this).parent();
+        let message_id = message.attr('id');
+        $.ajax({
+            url: "{% url 'social:message api' 0 %}".replace("0", message_id),
+            type: 'DELETE',
+            headers : { "X-CSRFToken" : $("[name=csrfmiddlewaretoken]").val() },
+            success() {
+                message.fadeOut(150);
+            },
+            error(jqXHR, textStatus, error) {
+                alert(error);
+            },
+        })
+    }
+
+    $(function () {
+        $('.remove-btn').click(remove_button)
+
+        // Form for posting a new message
+        $("#msg-form").submit(function(event) {
+            // prevent normal submission
+            event.preventDefault();
+            $.ajax({
+                type : $(this).attr('method'),
+                url : $(this).attr('action'),
+                data: $(this).serialize(),
+                success(data) {
+                    $('.info').hide()
+                    $(data).prependTo("#messages-div").hide().fadeIn(400);
+                    $('.remove-btn').unbind();
+                    $('.remove-btn').click(remove_button);
+                },
+                error(jqXHR, textStatus, error) {
+                    alert(error);
+                },
+            })
+        })
+    })
+</script>
+{% endblock %}
