@@ -1,6 +1,6 @@
 # Legal Ease
 
-This is a final year project. Parts of code are from ECS639U Web Programming coursework at Queen Mary University of London.
+This is a final year project. A web app summarising and simplifying legal documents. Parts of code are from ECS639U Web Programming coursework at Queen Mary University of London.
 
 ## License
 
